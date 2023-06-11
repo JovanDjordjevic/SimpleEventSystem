@@ -1,3 +1,7 @@
+build
+.vscode
+TODO.txt
+
 # Prerequisites
 *.d
 
