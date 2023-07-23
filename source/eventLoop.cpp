@@ -1,51 +1,82 @@
-#include "eventLoop.hpp"
 #include "eventDebug.hpp"
-
-#include <thread>
+#include "eventLoop.hpp"
 
 namespace simpleEventSystem {
     EventLoop& EventLoop::getInstance() {
+        FUNCTRACE();
         static EventLoop eventLoop;
         return eventLoop;
     }
 
     EventLoop::EventLoop() 
-        : m_eventQueues{
-            {EventPriority::DEFAULT, std::queue<std::shared_ptr<Event>>{}},
-            {EventPriority::HIGH, std::queue<std::shared_ptr<Event>>{}},
-            {EventPriority::LOW, std::queue<std::shared_ptr<Event>>{}}
-        }
-    {}
+        : mEventQueue{}
+    {
+        FUNCTRACE();
+    }
+    
+    EventLoop::~EventLoop() {
+        FUNCTRACE();
+    }
 
     void EventLoop::startLoop() {
-        m_loopThread = std::thread{&EventLoop::mainLoop, this};
+        FUNCTRACE();
+        mLoopThread = std::thread{&EventLoop::mainLoop, this};
     }
 
     void EventLoop::stopLoop() {
-        //
-        m_loopThread.join();
+        FUNCTRACE();
+        mQueueEventsAllowed = false;
+
+        {
+            std::unique_lock<std::mutex> eventQueueLock(mEventQueueMutex);
+            mCondEventPostFinished.wait(eventQueueLock, [this](){
+                return mEventQueue.size() == 0;
+            });
+        }
+
+        mShouldTerminateLoop = true;
+        mCondQueue.notify_one();
+
+        mLoopThread.join();
     }
 
     void EventLoop::mainLoop() {
-        auto& highPriorityQueue = m_eventQueues[EventPriority::HIGH];
-        auto& defaultPriorityQueue = m_eventQueues[EventPriority::DEFAULT];
-        auto& lowPriorityQueue = m_eventQueues[EventPriority::LOW];
-
+        FUNCTRACE();
+        Event* event = nullptr;
+        
         while (true) {
-            while (!highPriorityQueue.empty()) {
-                const auto& event = highPriorityQueue.front();
-                highPriorityQueue.pop();
+            {
+                std::unique_lock<std::mutex> eventQueueLock(mEventQueueMutex);
+                
+                mCondQueue.wait(eventQueueLock, [this](){
+                    return mShouldTerminateLoop || !mEventQueue.empty();
+                });
 
-                EVENT_LOOP_LOG("Event popped");
+                if (mShouldTerminateLoop) {
+                    return;
+                }
+
+                event = mEventQueue.front();
+                mEventQueue.pop();
             }
 
-            // for (const auto&& queuedEvent : highPriorityQueue) {}
-            // for (const auto&& queuedEvent : defaultPriorityQueue) {}
-            // for (const auto&& queuedEvent : lowPriorityQueue) {}
+            event->getEventGenerator()->notifyListeners(event);
+            
+            mCondEventPostFinished.notify_one();
         }
     }
-    
-    void EventLoop::queueEvent(const std::shared_ptr<Event>& event, EventPriority priority) {
-        m_eventQueues[priority].emplace(event);
+
+    void EventLoop::queueEvent(Event* event) {
+        FUNCTRACE();
+
+        {
+            std::unique_lock<std::mutex> eventQueueLock(mEventQueueMutex);
+
+            if(mQueueEventsAllowed) {
+                mEventQueue.emplace(event);
+            }
+        }
+
+        mCondQueue.notify_one();
     }
 } // namespace simpleEventSystem 
