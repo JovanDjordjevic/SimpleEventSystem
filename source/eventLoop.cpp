@@ -9,7 +9,7 @@ namespace simpleEventSystem {
     }
 
     EventLoop::EventLoop() 
-        : mEventQueue{}
+        : mEventQueue{}, mShouldTerminateLoop{false}, mQueueEventsAllowed{true}
     {
         FUNCTRACE();
     }
