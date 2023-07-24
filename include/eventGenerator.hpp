@@ -26,8 +26,10 @@ namespace simpleEventSystem {
             void unregisterListener(EventListener* listener);
 
             size_t getNumberOfListeners() const;
+
+            bool isGeneratorFor(EventListener* listener);
+
         private:
-            // zinc: cuva niz listenera
             std::vector<EventListener*> mListeners;
     };
 

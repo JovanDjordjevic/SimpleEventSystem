@@ -16,8 +16,10 @@ namespace simpleEventSystem {
             virtual ~EventListener();
             virtual void onEvent(Event* event) = 0;
 
-            void registerEventGenerator(EventGenerator* listener);
-            void unregisterEventGenerator(EventGenerator* listener);
+            void registerEventGenerator(EventGenerator* generator);
+            void unregisterEventGenerator(EventGenerator* generator);
+
+            bool isListenerOf(EventGenerator* generator);
 
         private:
             // list of generators this listener will receive events from

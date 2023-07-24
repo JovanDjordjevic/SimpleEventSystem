@@ -27,4 +27,8 @@ namespace simpleEventSystem {
         auto it = std::remove(std::begin(mGenerators), std::end(mGenerators), generator);
         mGenerators.erase(it, std::end(mGenerators));
     }
+
+    bool EventListener::isListenerOf(EventGenerator* generator) {
+        return std::find(mGenerators.begin(), mGenerators.end(), generator) != mGenerators.end();
+    }
 } // namespace simpleEventSystem 

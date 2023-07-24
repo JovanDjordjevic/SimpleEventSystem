@@ -54,4 +54,8 @@ namespace simpleEventSystem {
         FUNCTRACE();
         return mListeners.size();
     }
+
+    bool EventGenerator::isGeneratorFor(EventListener* listener) {
+        return std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end();
+    }
 } // namespace simpleEventSystem 
