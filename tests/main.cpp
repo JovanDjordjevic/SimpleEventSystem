@@ -45,7 +45,11 @@ class MyEventListener : public simpleEventSystem::EventListener {
         }
 
         void onEvent(simpleEventSystem::Event* event) override {
-            FUNCTRACE();
+            ON_EVENT(event, MyEvent, onMyEvent);
+        }
+
+        void onMyEvent(MyEvent* event) {
+            std::cout << event->getEventData() << std::endl;
         }
     private:
 };
@@ -64,6 +68,7 @@ int main() {
 
     meg.postEvent(new MyEvent{"Event 2"});
 
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     mainLoop.stopLoop();
     
     return 0;

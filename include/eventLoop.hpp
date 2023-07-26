@@ -27,12 +27,10 @@ namespace simpleEventSystem {
             void stopLoop();
 
             void queueEvent(Event* event);
-        
         private:
             EventLoop();
-            
-            void mainLoop();
-            
+            void mainLoop();       
+                 
         private:
             std::queue<Event*> mEventQueue;
             std::thread mLoopThread;
