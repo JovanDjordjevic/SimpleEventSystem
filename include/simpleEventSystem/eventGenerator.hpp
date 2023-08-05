@@ -25,7 +25,7 @@ namespace simpleEventSystem {
             void registerListener(EventListener* listener);
             void unregisterListener(EventListener* listener);
 
-            size_t getNumberOfListeners() const;
+            std::size_t getNumberOfListeners() const;
 
             bool isGeneratorFor(EventListener* listener);
 

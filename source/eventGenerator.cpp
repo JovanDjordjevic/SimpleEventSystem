@@ -50,7 +50,7 @@ namespace simpleEventSystem {
         mListeners.erase(it, mListeners.end());
     }
 
-    size_t EventGenerator::getNumberOfListeners() const {
+    std::size_t EventGenerator::getNumberOfListeners() const {
         FUNCTRACE();
         return mListeners.size();
     }
