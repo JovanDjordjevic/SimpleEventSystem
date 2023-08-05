@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "event.hpp"
-#include "eventLoop.hpp"
-#include "eventListener.hpp"
-#include "eventGenerator.hpp"
-#include "eventDebug.hpp"
+#include "simpleEventSystem/event.hpp"
+#include "simpleEventSystem/eventLoop.hpp"
+#include "simpleEventSystem/eventListener.hpp"
+#include "simpleEventSystem/eventGenerator.hpp"
+#include "simpleEventSystem/eventDebug.hpp"
 
 class MyEvent : public simpleEventSystem::Event {
     public:

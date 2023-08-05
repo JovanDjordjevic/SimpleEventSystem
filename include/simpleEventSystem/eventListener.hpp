@@ -38,7 +38,6 @@ namespace simpleEventSystem {
             // list of generators this listener will receive events from
             std::vector<EventGenerator*> mGenerators;
     };
-
 } // namespace simpleEventSystem 
 
 #endif // __SIMPLE_EVENT_LISTENER__

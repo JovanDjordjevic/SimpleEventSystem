@@ -1,8 +1,8 @@
 #include <algorithm>
 
-#include "eventDebug.hpp"
-#include "eventGenerator.hpp"
-#include "eventLoop.hpp"
+#include "simpleEventSystem/eventDebug.hpp"
+#include "simpleEventSystem/eventGenerator.hpp"
+#include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
     EventGenerator::EventGenerator() {

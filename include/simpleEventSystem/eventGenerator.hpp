@@ -32,7 +32,6 @@ namespace simpleEventSystem {
         private:
             std::vector<EventListener*> mListeners;
     };
-
 } // namespace simpleEventSystem 
 
 #endif // __SIMPLE_EVENT_GENERATOR__

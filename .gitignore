@@ -2,6 +2,8 @@ build
 .vscode
 TODO.txt
 
+docs/html
+
 # Prerequisites
 *.d
 

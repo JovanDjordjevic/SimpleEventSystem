@@ -1,9 +1,9 @@
 #include <iostream>
 #include <algorithm>
 
-#include "eventDebug.hpp"
-#include "eventListener.hpp"
-#include "eventLoop.hpp"
+#include "simpleEventSystem/eventDebug.hpp"
+#include "simpleEventSystem/eventListener.hpp"
+#include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
     EventListener::EventListener() {

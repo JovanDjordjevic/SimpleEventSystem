@@ -1,5 +1,5 @@
-#include "eventDebug.hpp"
-#include "eventLoop.hpp"
+#include "simpleEventSystem/eventDebug.hpp"
+#include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
     EventLoop& EventLoop::getInstance() {

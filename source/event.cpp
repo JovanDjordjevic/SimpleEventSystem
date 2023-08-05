@@ -1,5 +1,5 @@
-#include "event.hpp"
-#include "eventDebug.hpp"
+#include "simpleEventSystem/event.hpp"
+#include "simpleEventSystem/eventDebug.hpp"
 
 namespace simpleEventSystem {
     Event::Event() 
@@ -30,5 +30,4 @@ namespace simpleEventSystem {
         FUNCTRACE();
         return mIsConsumed;
     }
-
 } // namespace simpleEventSystem 

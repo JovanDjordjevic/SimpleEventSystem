@@ -9,6 +9,8 @@
 #include <string>
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+// for windows
+// #define __FILENAME__ (strrchr(__FILE__, '\') ? strrchr(__FILE__, '\') + 1 : __FILE__)
 
 #define ALLOW_DEBUG_LOGS
 #define ALLOW_FUNCTRACE

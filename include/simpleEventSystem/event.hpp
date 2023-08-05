@@ -27,7 +27,6 @@ namespace simpleEventSystem {
             bool mIsConsumed;
             EventGenerator* mEventGenerator;
     };
-
 } // namespace simpleEventSystem 
 
 #endif // __SIMPLE_EVENT__
