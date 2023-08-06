@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <sstream>
 
 #include "simpleEventSystem/eventDebug.hpp"
 #include "simpleEventSystem/eventGenerator.hpp"
@@ -27,7 +28,10 @@ namespace simpleEventSystem {
         event->setEventGenerator(this);
 
         for (auto listener : mListeners) {
-            EVENT_LOG("sending event to listener ", listener);
+            std::ostringstream oss;
+            oss << listener;
+            EVENT_LOG("sending event to listener " + oss.str());
+
             listener->onEvent(event);
 
             if (event->isConsumed()) {
@@ -56,6 +60,7 @@ namespace simpleEventSystem {
     }
 
     bool EventGenerator::isGeneratorFor(EventListener* listener) {
+        FUNCTRACE();
         return std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end();
     }
 } // namespace simpleEventSystem 

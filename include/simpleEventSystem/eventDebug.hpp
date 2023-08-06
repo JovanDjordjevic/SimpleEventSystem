@@ -5,37 +5,28 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 #include <string>
 
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-// for windows
-// #define __FILENAME__ (strrchr(__FILE__, '\') ? strrchr(__FILE__, '\') + 1 : __FILE__)
+#define __FILE_NAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__))
+#define __FUNCTION_NAME__ (strrchr(__FUNCTION__, ':') ? strrchr(__FUNCTION__, ':') + 1 : __FUNCTION__)
 
 #define ALLOW_DEBUG_LOGS
 #define ALLOW_FUNCTRACE
 
 #ifdef ALLOW_DEBUG_LOGS
-    template<typename... Args>
-    inline void EVENT_LOG(Args&&... args) {   
+    inline void EVENT_LOG(std::string&& str) {   
         auto t = std::time(nullptr);
         auto tm = *std::localtime(&t);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, "%a, %d %b %Y %T");
-
-        std::cerr << "[timestamp: " << oss.str() << "] ";
-        ((std::cerr << args), ...);
-        std::cerr << std::endl;
+        std::cerr << "[timestamp: " << std::put_time(&tm, "%a, %d %b %Y %T") << "] " << str << std::endl;
     }
 
     #ifdef ALLOW_FUNCTRACE
-        #define FUNCTRACE() { EVENT_LOG("file: [", __FILENAME__, "] func: [", __FUNCTION__, "] line: [", __LINE__, "]"); }
+        #define FUNCTRACE() { EVENT_LOG("file: [" + std::string{__FILE_NAME__} + "] func: [" + std::string{__FUNCTION_NAME__} + "] line: [" + std::to_string(__LINE__) + "]"); }
     #else
         #define FUNCTRACE() {}
     #endif
 #else
-    template<typename... Args>
-    inline void EVENT_LOG(Args&&...) {}
+    inline void EVENT_LOG(std::string&& str) {}
 
     #define FUNCTRACE() {}
 #endif //ALLOW_DEBUG_LOGS

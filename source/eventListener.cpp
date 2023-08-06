@@ -29,6 +29,7 @@ namespace simpleEventSystem {
     }
 
     bool EventListener::isListenerOf(EventGenerator* generator) {
+        FUNCTRACE();
         return std::find(mGenerators.begin(), mGenerators.end(), generator) != mGenerators.end();
     }
 } // namespace simpleEventSystem 
