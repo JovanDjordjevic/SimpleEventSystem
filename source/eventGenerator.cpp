@@ -19,12 +19,20 @@ namespace simpleEventSystem {
 
     void EventGenerator::postEvent(Event* event) {
         FUNCTRACE();
+        if (!event) {
+            return;
+        }
+
         event->setEventGenerator(this);
         EventLoop::getInstance().queueEvent(event);
     }
 
     void EventGenerator::notifyListeners(Event* event) {
         FUNCTRACE();
+        if (!event) {
+            return;
+        }
+
         event->setEventGenerator(this);
 
         for (auto listener : mListeners) {
@@ -40,16 +48,25 @@ namespace simpleEventSystem {
         }
 
         delete event;
+        event = nullptr;
     }
 
     void EventGenerator::registerListener(EventListener* listener) {
         FUNCTRACE();
+        if (!listener) {
+            return;
+        }
+
         mListeners.emplace_back(listener);
         listener->registerEventGenerator(this);
     }
 
     void EventGenerator::unregisterListener(EventListener* listener) {
         FUNCTRACE();
+        if (!listener) {
+            return;
+        }
+
         auto it = std::remove(mListeners.begin(), mListeners.end(), listener);
         mListeners.erase(it, mListeners.end());
     }
@@ -61,6 +78,10 @@ namespace simpleEventSystem {
 
     bool EventGenerator::isGeneratorFor(EventListener* listener) {
         FUNCTRACE();
+        if (!listener) {
+            return false;
+        }
+
         return std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end();
     }
 } // namespace simpleEventSystem 

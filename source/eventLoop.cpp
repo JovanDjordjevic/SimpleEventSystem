@@ -68,6 +68,9 @@ namespace simpleEventSystem {
 
     void EventLoop::queueEvent(Event* event) {
         FUNCTRACE();
+        if (!event) {
+            return;
+        }
 
         {
             std::unique_lock<std::mutex> eventQueueLock(mEventQueueMutex);

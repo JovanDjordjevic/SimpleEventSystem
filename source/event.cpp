@@ -14,6 +14,10 @@ namespace simpleEventSystem {
 
     void Event::setEventGenerator(EventGenerator* generator) {
         FUNCTRACE();
+        if (!generator) {
+            return;
+        }
+
         mEventGenerator = generator;
     }
 

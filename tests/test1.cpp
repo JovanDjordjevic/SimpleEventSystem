@@ -68,6 +68,8 @@ int main() {
 
     meg.postEvent(new MyEvent{"Event 2"});
 
+    meg.postEvent(nullptr); // should be ignored
+
     std::this_thread::sleep_for(std::chrono::seconds(2));
     mainLoop.stopLoop();
     
