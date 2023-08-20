@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "event.hpp"
-#include "eventListener.hpp"
 
 namespace simpleEventSystem {
+    enum class EventPriority;
     class Event;
     class EventListener;
 
@@ -16,11 +16,11 @@ namespace simpleEventSystem {
             virtual ~EventGenerator();
 
             // Posts the event to the event loop. It just calls notifyListeners from the event loop thread
-            void postEvent(Event* event);
+            void postEvent(Event* event, const EventPriority priority = EventPriority::DEFAULT);
 
             // Notifies all listeners that are registered to receive events from this event generator
             // This method will free the memory occupied by the event, no need for user to delete event manually
-            void notifyListeners(Event* event);
+            void notifyListeners(Event* event, const EventPriority priority = EventPriority::DEFAULT);
 
             void registerListener(EventListener* listener);
             void unregisterListener(EventListener* listener);

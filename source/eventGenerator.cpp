@@ -3,6 +3,7 @@
 
 #include "simpleEventSystem/eventDebug.hpp"
 #include "simpleEventSystem/eventGenerator.hpp"
+#include "simpleEventSystem/eventListener.hpp"
 #include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
@@ -17,23 +18,25 @@ namespace simpleEventSystem {
         }
     }
 
-    void EventGenerator::postEvent(Event* event) {
+    void EventGenerator::postEvent(Event* event, const EventPriority priority) {
         FUNCTRACE();
         if (!event) {
             return;
         }
 
         event->setEventGenerator(this);
+        event->setPriority(priority);
         EventLoop::getInstance().queueEvent(event);
     }
 
-    void EventGenerator::notifyListeners(Event* event) {
+    void EventGenerator::notifyListeners(Event* event, const EventPriority priority) {
         FUNCTRACE();
         if (!event) {
             return;
         }
 
         event->setEventGenerator(this);
+        event->setPriority(priority);
 
         for (auto listener : mListeners) {
             std::ostringstream oss;

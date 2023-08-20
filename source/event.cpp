@@ -3,7 +3,7 @@
 
 namespace simpleEventSystem {
     Event::Event() 
-        : mIsConsumed{false}, mEventGenerator{nullptr}
+        : mIsConsumed{false}, mPriority{EventPriority::DEFAULT}, mEventGenerator{nullptr}
     {
         FUNCTRACE();
     }
@@ -26,6 +26,16 @@ namespace simpleEventSystem {
         return mEventGenerator;
     }
 
+    void Event::setPriority(const EventPriority priority) {
+        FUNCTRACE();
+        mPriority = priority;
+    }
+    
+    EventPriority Event::getPriority() const {
+        FUNCTRACE();
+        return mPriority;
+    }   
+
     void Event::consume() {
         FUNCTRACE();
         mIsConsumed = true;
@@ -34,5 +44,9 @@ namespace simpleEventSystem {
     bool Event::isConsumed() const {
         FUNCTRACE();
         return mIsConsumed;
+    }
+
+    bool EventPirorityComparator::operator()(const Event* lhs, const Event* rhs) {
+        return static_cast<int>(lhs->getPriority()) < static_cast<int>(rhs->getPriority());
     }
 } // namespace simpleEventSystem 

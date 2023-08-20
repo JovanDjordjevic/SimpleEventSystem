@@ -2,6 +2,7 @@
 #include <algorithm>
 
 #include "simpleEventSystem/eventDebug.hpp"
+#include "simpleEventSystem/eventGenerator.hpp"
 #include "simpleEventSystem/eventListener.hpp"
 #include "simpleEventSystem/eventLoop.hpp"
 

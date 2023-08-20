@@ -9,11 +9,12 @@
 #include <thread>
 #include <queue>
 
-#include "event.hpp"
-#include "eventGenerator.hpp"
-#include "eventListener.hpp"
-
 namespace simpleEventSystem {
+    class Event;
+    struct EventPirorityComparator;
+    class EventGenerator;
+    class EventListener;
+
     class EventLoop {
         public:
             static EventLoop& getInstance();
@@ -32,7 +33,7 @@ namespace simpleEventSystem {
             void mainLoop();       
                  
         private:
-            std::queue<Event*> mEventQueue;
+            std::priority_queue<Event*, std::vector<Event*>, EventPirorityComparator> mEventQueue;
             std::thread mLoopThread;
 
             std::mutex mEventQueueMutex;

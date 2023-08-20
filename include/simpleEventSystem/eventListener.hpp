@@ -3,9 +3,6 @@
 
 #include <vector>
 
-#include "event.hpp"
-#include "eventGenerator.hpp"
-
 #define ON_EVENT(_eventPtr_, _eventClass_, _function_) \
     if (_eventClass_* _castedPtr_ = dynamic_cast<_eventClass_*>(_eventPtr_)) { \
         _function_(_castedPtr_); \

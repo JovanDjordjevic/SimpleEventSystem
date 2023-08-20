@@ -50,6 +50,7 @@ class MyEventListener : public simpleEventSystem::EventListener {
 
         void onMyEvent(MyEvent* event) {
             std::cout << event->getEventData() << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     private:
 };
@@ -69,6 +70,11 @@ int main() {
     meg.postEvent(new MyEvent{"Event 2"});
 
     meg.postEvent(nullptr); // should be ignored
+
+    
+    meg.postEvent(new MyEvent{"Event 3"}, simpleEventSystem::EventPriority::LOW);
+    meg.postEvent(new MyEvent{"Event 4"});
+    meg.postEvent(new MyEvent{"Event 5"}, simpleEventSystem::EventPriority::HIGH);
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
     mainLoop.stopLoop();

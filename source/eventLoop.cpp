@@ -1,4 +1,7 @@
+#include "simpleEventSystem/event.hpp"
 #include "simpleEventSystem/eventDebug.hpp"
+#include "simpleEventSystem/eventGenerator.hpp"
+#include "simpleEventSystem/eventListener.hpp"
 #include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
@@ -56,11 +59,11 @@ namespace simpleEventSystem {
                     return;
                 }
 
-                event = mEventQueue.front();
+                event = mEventQueue.top();
                 mEventQueue.pop();
             }
 
-            event->getEventGenerator()->notifyListeners(event);
+            event->getEventGenerator()->notifyListeners(event, event->getPriority());
             
             mCondEventPostFinished.notify_one();
         }
