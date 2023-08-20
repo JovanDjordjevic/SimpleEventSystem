@@ -1,6 +1,3 @@
-#include <iostream>
-#include <algorithm>
-
 #include "simpleEventSystem/eventDebug.hpp"
 #include "simpleEventSystem/eventGenerator.hpp"
 #include "simpleEventSystem/eventListener.hpp"
@@ -14,7 +11,7 @@ namespace simpleEventSystem {
     EventListener::~EventListener() {
         FUNCTRACE();
         for (auto generator : mGenerators) {
-            generator->unregisterListener(this);
+            generator->unregisterListener(this, false);
         }
     }
 
@@ -24,17 +21,27 @@ namespace simpleEventSystem {
             return;
         }
 
-        mGenerators.emplace_back(generator);
+        mGenerators.emplace(generator);
     }
 
-    void EventListener::unregisterEventGenerator(EventGenerator* generator) {
+    void EventListener::unregisterEventGenerator(EventGenerator* generator, const bool mutual) {
         FUNCTRACE();
         if (!generator) {
             return;
         }
 
-        auto it = std::remove(std::begin(mGenerators), std::end(mGenerators), generator);
-        mGenerators.erase(it, std::end(mGenerators));
+        auto it = mGenerators.find(generator);
+        if (it != mGenerators.end()) {
+            auto tmp = *it;
+            mGenerators.erase(it);
+            if (mutual) {
+                tmp->unregisterListener(this);
+            }
+        }
+    }
+
+    std::size_t EventListener::getNumberOfGenerators() const {
+        return mGenerators.size();
     }
 
     bool EventListener::isListenerOf(EventGenerator* generator) {
@@ -43,6 +50,6 @@ namespace simpleEventSystem {
             return false;
         }
 
-        return std::find(mGenerators.begin(), mGenerators.end(), generator) != mGenerators.end();
+        return mGenerators.find(generator) != mGenerators.end();
     }
 } // namespace simpleEventSystem 

@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <sstream>
 
 #include "simpleEventSystem/eventDebug.hpp"
@@ -14,7 +13,7 @@ namespace simpleEventSystem {
     EventGenerator::~EventGenerator() {
         FUNCTRACE();
         for (auto listener : mListeners) {
-            listener->unregisterEventGenerator(this);
+            listener->unregisterEventGenerator(this, false);
         }
     }
 
@@ -60,18 +59,24 @@ namespace simpleEventSystem {
             return;
         }
 
-        mListeners.emplace_back(listener);
+        mListeners.emplace(listener);
         listener->registerEventGenerator(this);
     }
 
-    void EventGenerator::unregisterListener(EventListener* listener) {
+    void EventGenerator::unregisterListener(EventListener* listener, const bool mutual) {
         FUNCTRACE();
         if (!listener) {
             return;
         }
-
-        auto it = std::remove(mListeners.begin(), mListeners.end(), listener);
-        mListeners.erase(it, mListeners.end());
+        
+        auto it = mListeners.find(listener);
+        if (it != mListeners.end()) {
+            auto tmp = *it;
+            mListeners.erase(it);
+            if (mutual) {
+                tmp->unregisterEventGenerator(this);
+            }
+        }
     }
 
     std::size_t EventGenerator::getNumberOfListeners() const {
@@ -85,6 +90,6 @@ namespace simpleEventSystem {
             return false;
         }
 
-        return std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end();
+        return mListeners.find(listener) != mListeners.end();
     }
 } // namespace simpleEventSystem 

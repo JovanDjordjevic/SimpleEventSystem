@@ -1,7 +1,7 @@
 #ifndef __SIMPLE_EVENT_GENERATOR__
 #define __SIMPLE_EVENT_GENERATOR__
 
-#include <vector>
+#include <set>
 
 #include "event.hpp"
 
@@ -23,14 +23,14 @@ namespace simpleEventSystem {
             void notifyListeners(Event* event, const EventPriority priority = EventPriority::DEFAULT);
 
             void registerListener(EventListener* listener);
-            void unregisterListener(EventListener* listener);
+            void unregisterListener(EventListener* listener, const bool mutual = true);
 
             std::size_t getNumberOfListeners() const;
 
             bool isGeneratorFor(EventListener* listener);
 
         private:
-            std::vector<EventListener*> mListeners;
+            std::set<EventListener*> mListeners;
     };
 } // namespace simpleEventSystem 
 
