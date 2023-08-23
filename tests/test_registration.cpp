@@ -105,5 +105,33 @@ int main() {
     assert(mel5.getNumberOfGenerators() == 0);
     assert(mel5.isListenerOf(&meg5) == false);
 
+    // ==================================================================================
+
+    MyEventGenerator meg6;
+    MyEventListener mel6;
+    MyEventListener mel7;
+
+    meg6.registerListener(&mel6);
+    meg6.registerListener(&mel7, 500);
+    meg6.registerListener(&mel7, 1500);
+
+    assert(meg6.getNumberOfListeners() == 2);
+    assert(meg6.isGeneratorFor(&mel6) == true);
+    assert(meg6.isGeneratorFor(&mel7) == true);
+    assert(mel6.getNumberOfGenerators() == 1);
+    assert(mel6.isListenerOf(&meg6) == true);
+    assert(mel7.getNumberOfGenerators() == 1);
+    assert(mel7.isListenerOf(&meg6) == true);
+    assert(meg6.getListenersWithPriority(1000).size() == 1);
+    assert(meg6.getListenersWithPriority(500).size() == 1);
+    assert(meg6.getListenersWithPriority(1500).size() == 0);
+
+    auto meg6ListenersOrdered = meg6.getListenersAndTheirPriorities();
+    assert(meg6ListenersOrdered.size() == 2);
+    assert(meg6ListenersOrdered[0].first == &mel6);
+    assert(meg6ListenersOrdered[1].first == &mel7);
+    assert(meg6ListenersOrdered[0].second == 1000);
+    assert(meg6ListenersOrdered[1].second == 500);
+
     return 0;
 }

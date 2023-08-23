@@ -2,13 +2,20 @@
 #define __SIMPLE_EVENT_GENERATOR__
 
 #include <set>
+#include <vector>
 
 #include "event.hpp"
 
 namespace simpleEventSystem {
+    class EventListener;
+
+    // traversing of std set is from lowest to highest, so we do highest priority to be first (lowest)
+    struct ListenerPriorityComparator {
+        bool operator()(const std::pair<EventListener*, int>& lhs, const std::pair<EventListener*, int>& rhs);
+    };
+    
     enum class EventPriority;
     class Event;
-    class EventListener;
 
     class EventGenerator {
         public:
@@ -22,15 +29,17 @@ namespace simpleEventSystem {
             // This method will free the memory occupied by the event, no need for user to delete event manually
             void notifyListeners(Event* event, const EventPriority priority = EventPriority::DEFAULT);
 
-            void registerListener(EventListener* listener);
+            void registerListener(EventListener* listener, int listenerPriority = 1000);
             void unregisterListener(EventListener* listener, const bool mutual = true);
 
             std::size_t getNumberOfListeners() const;
 
             bool isGeneratorFor(EventListener* listener);
 
+            std::vector<EventListener*> getListenersWithPriority(const int priority) const;
+            std::vector<std::pair<EventListener*, int>> getListenersAndTheirPriorities() const;
         private:
-            std::set<EventListener*> mListeners;
+            std::set<std::pair<EventListener*, int>, ListenerPriorityComparator> mListeners;
     };
 } // namespace simpleEventSystem 
 
