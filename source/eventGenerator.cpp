@@ -7,8 +7,8 @@
 #include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
-    bool ListenerPriorityComparator::operator()(const std::pair<EventListener*, int>& lhs, const std::pair<EventListener*, int>& rhs) {
-        return lhs.second >= rhs.second;
+    bool ListenerPriorityComparator::operator()(const std::pair<EventListener*, int>& lhs, const std::pair<EventListener*, int>& rhs) const {
+        return lhs.second > rhs.second;
     }
 
     EventGenerator::EventGenerator() {
@@ -64,7 +64,7 @@ namespace simpleEventSystem {
             return;
         }
 
-        // listeners must not be repeated in mListeners, but std::set cannot be ordered such that listener is unique and all
+        // listeners must not be repeated in mListeners, but std::multiset cannot be ordered such that listener is unique and all
         // listeners are ordered descending, so to enforce uniqueness, we traverse the set once here
         auto cond = [listener](const std::pair<EventListener*, int>& elem){ return elem.first == listener; };
         if (std::find_if(mListeners.begin(), mListeners.end(), cond) != mListeners.end()) {

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#define __FILE_NAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__))
+#define __LAST_FILENAME_COMPONENT__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__))
 #define __FUNCTION_NAME__ (strrchr(__FUNCTION__, ':') ? strrchr(__FUNCTION__, ':') + 1 : __FUNCTION__)
 
 #define ALLOW_DEBUG_LOGS
@@ -21,7 +21,7 @@
     }
 
     #ifdef ALLOW_FUNCTRACE
-        #define FUNCTRACE() { EVENT_LOG("file: [" + std::string{__FILE_NAME__} + "] func: [" + std::string{__FUNCTION_NAME__} + "] line: [" + std::to_string(__LINE__) + "]"); }
+        #define FUNCTRACE() { EVENT_LOG("file: [" + std::string{__LAST_FILENAME_COMPONENT__} + "] func: [" + std::string{__FUNCTION_NAME__} + "] line: [" + std::to_string(__LINE__) + "]"); }
     #else
         #define FUNCTRACE() {}
     #endif

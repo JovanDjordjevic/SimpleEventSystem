@@ -11,7 +11,7 @@ namespace simpleEventSystem {
 
     // traversing of std set is from lowest to highest, so we do highest priority to be first (lowest)
     struct ListenerPriorityComparator {
-        bool operator()(const std::pair<EventListener*, int>& lhs, const std::pair<EventListener*, int>& rhs);
+        bool operator()(const std::pair<EventListener*, int>& lhs, const std::pair<EventListener*, int>& rhs) const;
     };
     
     enum class EventPriority;
@@ -39,7 +39,8 @@ namespace simpleEventSystem {
             std::vector<EventListener*> getListenersWithPriority(const int priority) const;
             std::vector<std::pair<EventListener*, int>> getListenersAndTheirPriorities() const;
         private:
-            std::set<std::pair<EventListener*, int>, ListenerPriorityComparator> mListeners;
+            // multiset is chosen for this because MSVC debug builds will throw errors that strict weak ordering is not enforced if std::set is used
+            std::multiset<std::pair<EventListener*, int>, ListenerPriorityComparator> mListeners;
     };
 } // namespace simpleEventSystem 
 
