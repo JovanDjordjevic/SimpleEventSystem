@@ -11,36 +11,51 @@ namespace simpleEventSystem {
         return eventLoop;
     }
 
-    EventLoop::EventLoop() 
-        : mEventQueue{}, mShouldTerminateLoop{false}, mQueueEventsAllowed{true}
+    EventLoop::EventLoop() noexcept
+        : mEventQueue{}, mShouldTerminateLoop{false}, mQueueEventsAllowed{true}, mLoopStopped{true}
     {
         FUNCTRACE();
     }
     
-    EventLoop::~EventLoop() {
+    EventLoop::~EventLoop() noexcept {
         FUNCTRACE();
+        if (!mLoopStopped) {
+            stopLoop();
+        }
     }
 
     void EventLoop::startLoop() {
         FUNCTRACE();
-        mLoopThread = std::thread{&EventLoop::mainLoop, this};
+
+        if (mLoopStopped) {
+            mQueueEventsAllowed = true;
+            mShouldTerminateLoop = false;
+
+            mLoopThread = std::thread{&EventLoop::mainLoop, this};
+
+            mLoopStopped = false;
+        }
     }
 
     void EventLoop::stopLoop() {
         FUNCTRACE();
-        mQueueEventsAllowed = false;
+        if (!mLoopStopped) {
+            mQueueEventsAllowed = false;
 
-        {
-            std::unique_lock<std::mutex> eventQueueLock(mEventQueueMutex);
-            mCondEventPostFinished.wait(eventQueueLock, [this](){
-                return mEventQueue.size() == 0;
-            });
+            {
+                std::unique_lock<std::mutex> eventQueueLock(mEventQueueMutex);
+                mCondEventPostFinished.wait(eventQueueLock, [this](){
+                    return mEventQueue.size() == 0;
+                });
+            }
+
+            mShouldTerminateLoop = true;
+            mCondQueue.notify_one();
+
+            mLoopThread.join();
+
+            mLoopStopped = true;
         }
-
-        mShouldTerminateLoop = true;
-        mCondQueue.notify_one();
-
-        mLoopThread.join();
     }
 
     void EventLoop::mainLoop() {
@@ -80,6 +95,9 @@ namespace simpleEventSystem {
 
             if(mQueueEventsAllowed) {
                 mEventQueue.emplace(event);
+            }
+            else { // TEMPORARY 
+                EVENT_LOG("Could not add event to event loop");
             }
         }
 

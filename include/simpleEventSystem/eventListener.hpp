@@ -22,8 +22,14 @@ namespace simpleEventSystem {
 
     class EventListener {
         public:
-            EventListener();
-            virtual ~EventListener();
+            EventListener() noexcept = default;
+            EventListener(const EventListener& other) noexcept = default;
+            EventListener(EventListener&& other) noexcept = default;
+            virtual ~EventListener() noexcept;
+
+            EventListener& operator=(const EventListener& other) noexcept = default;
+            EventListener& operator=(EventListener&& other) noexcept = default;
+
             virtual void onEvent(Event* event) = 0;
 
             void registerEventGenerator(EventGenerator* generator);

@@ -2,13 +2,9 @@
 #include "simpleEventSystem/eventDebug.hpp"
 
 namespace simpleEventSystem {
-    Event::Event() 
+    Event::Event() noexcept
         : mIsConsumed{false}, mPriority{EventPriority::DEFAULT}, mEventGenerator{nullptr}
     {
-        FUNCTRACE();
-    }
-
-    Event::~Event() {
         FUNCTRACE();
     }
 
@@ -32,7 +28,7 @@ namespace simpleEventSystem {
     }
     
     EventPriority Event::getPriority() const {
-        FUNCTRACE();
+        // FUNCTRACE();
         return mPriority;
     }   
 

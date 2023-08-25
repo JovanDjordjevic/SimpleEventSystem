@@ -4,11 +4,7 @@
 #include "simpleEventSystem/eventLoop.hpp"
 
 namespace simpleEventSystem {
-    EventListener::EventListener() {
-        FUNCTRACE();
-    }
-
-    EventListener::~EventListener() {
+    EventListener::~EventListener() noexcept {
         FUNCTRACE();
         for (auto generator : mGenerators) {
             generator->unregisterListener(this, false);

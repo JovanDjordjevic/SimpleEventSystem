@@ -19,8 +19,13 @@ namespace simpleEventSystem {
 
     class EventGenerator {
         public:
-            EventGenerator();
-            virtual ~EventGenerator();
+            EventGenerator() noexcept = default;
+            EventGenerator(const EventGenerator& other) noexcept = default;
+            EventGenerator(EventGenerator&& other) noexcept = default;
+            virtual ~EventGenerator() noexcept;
+
+            EventGenerator& operator=(const EventGenerator& other) noexcept = default;
+            EventGenerator& operator=(EventGenerator&& other) noexcept = default;
 
             // Posts the event to the event loop. It just calls notifyListeners from the event loop thread
             void postEvent(Event* event, const EventPriority priority = EventPriority::DEFAULT);

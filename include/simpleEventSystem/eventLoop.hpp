@@ -19,17 +19,20 @@ namespace simpleEventSystem {
         public:
             static EventLoop& getInstance();
 
-            ~EventLoop();
-
             EventLoop(const EventLoop& other) = delete;
             EventLoop(EventLoop&& other) = delete;
+
+            ~EventLoop() noexcept;
+
+            EventLoop& operator=(const EventLoop& other) = delete;
+            EventLoop& operator=(EventLoop&& other) = delete;
 
             void startLoop();
             void stopLoop();
 
             void queueEvent(Event* event);
         private:
-            EventLoop();
+            EventLoop() noexcept;
             void mainLoop();       
                  
         private:
@@ -41,6 +44,7 @@ namespace simpleEventSystem {
             std::condition_variable mCondEventPostFinished;
             std::atomic<bool> mShouldTerminateLoop;
             std::atomic<bool> mQueueEventsAllowed;
+            std::atomic<bool> mLoopStopped;
     };
 } // namespace simpleEventSystem 
 

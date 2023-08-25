@@ -6,18 +6,24 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #define __LAST_FILENAME_COMPONENT__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__))
 #define __FUNCTION_NAME__ (strrchr(__FUNCTION__, ':') ? strrchr(__FUNCTION__, ':') + 1 : __FUNCTION__)
 
 #define ALLOW_DEBUG_LOGS
 #define ALLOW_FUNCTRACE
+// #define TIMESTAMP_IN_LOGS
 
 #ifdef ALLOW_DEBUG_LOGS
     inline void EVENT_LOG(std::string&& str) {   
         auto t = std::time(nullptr);
         auto tm = *std::localtime(&t);
-        std::cerr << "[timestamp: " << std::put_time(&tm, "%a, %d %b %Y %T") << "] " << str << std::endl;
+        #ifdef TIMESTAMP_IN_LOGS
+            std::cerr << "[timestamp: " << std::put_time(&tm, "%a, %d %b %Y %T") << "] [thread ID: " << std::this_thread::get_id() << "] " << str << std::endl;
+        #else
+            std::cerr << "[thread ID: " << std::this_thread::get_id() << "] " << str << std::endl;
+        #endif
     }
 
     #ifdef ALLOW_FUNCTRACE

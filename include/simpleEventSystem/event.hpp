@@ -14,8 +14,13 @@ namespace simpleEventSystem {
     
     class Event {
         public:
-            Event();
-            virtual ~Event();
+            Event() noexcept;
+            Event(const Event& other) noexcept = default;
+            Event(Event&& other) noexcept = default;
+            virtual ~Event() noexcept = default;
+
+            Event& operator=(const Event& other) noexcept = default;
+            Event& operator=(Event&& other) noexcept = default;
             
             void setEventGenerator(EventGenerator* generator);
             EventGenerator* getEventGenerator() const;

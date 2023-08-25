@@ -11,11 +11,7 @@ namespace simpleEventSystem {
         return lhs.second > rhs.second;
     }
 
-    EventGenerator::EventGenerator() {
-        FUNCTRACE();
-    }
-
-    EventGenerator::~EventGenerator() {
+    EventGenerator::~EventGenerator() noexcept {
         FUNCTRACE();
         for (auto&& listener : mListeners) {
             listener.first->unregisterEventGenerator(this, false);
