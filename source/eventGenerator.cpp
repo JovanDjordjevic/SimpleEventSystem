@@ -18,15 +18,15 @@ namespace simpleEventSystem {
         }
     }
 
-    void EventGenerator::postEvent(Event* event, const EventPriority priority) {
+    bool EventGenerator::postEvent(Event* event, const EventPriority priority) {
         FUNCTRACE();
         if (!event) {
-            return;
+            return false;
         }
 
         event->setEventGenerator(this);
         event->setPriority(priority);
-        EventLoop::getInstance().queueEvent(event);
+        return EventLoop::getInstance().queueEvent(event);
     }
 
     void EventGenerator::notifyListeners(Event* event, const EventPriority priority) {

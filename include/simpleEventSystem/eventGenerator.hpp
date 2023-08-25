@@ -28,7 +28,9 @@ namespace simpleEventSystem {
             EventGenerator& operator=(EventGenerator&& other) noexcept = default;
 
             // Posts the event to the event loop. It just calls notifyListeners from the event loop thread
-            void postEvent(Event* event, const EventPriority priority = EventPriority::DEFAULT);
+            // returns true if event was successfully posted to the event loop. Note that in case of posting failure, event is never sent to listeners and therefore never deleted
+            // TODO: think about doing notifyListeners directly when posting fails ?
+            bool postEvent(Event* event, const EventPriority priority = EventPriority::DEFAULT);
 
             // Notifies all listeners that are registered to receive events from this event generator
             // This method will free the memory occupied by the event, no need for user to delete event manually

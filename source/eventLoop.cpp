@@ -84,10 +84,10 @@ namespace simpleEventSystem {
         }
     }
 
-    void EventLoop::queueEvent(Event* event) {
+    bool EventLoop::queueEvent(Event* event) {
         FUNCTRACE();
         if (!event) {
-            return;
+            return false;
         }
 
         {
@@ -96,11 +96,13 @@ namespace simpleEventSystem {
             if(mQueueEventsAllowed) {
                 mEventQueue.emplace(event);
             }
-            else { // TEMPORARY 
-                EVENT_LOG("Could not add event to event loop");
+            else { 
+                return false;
             }
         }
 
         mCondQueue.notify_one();
+
+        return true;
     }
 } // namespace simpleEventSystem 

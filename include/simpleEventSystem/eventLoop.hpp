@@ -30,7 +30,8 @@ namespace simpleEventSystem {
             void startLoop();
             void stopLoop();
 
-            void queueEvent(Event* event);
+            // returns true if event was enqueued successfully
+            bool queueEvent(Event* event);
         private:
             EventLoop() noexcept;
             void mainLoop();       
