@@ -13,17 +13,22 @@
 
 #define ALLOW_DEBUG_LOGS
 #define ALLOW_FUNCTRACE
-// #define TIMESTAMP_IN_LOGS
+#define TIMESTAMP_IN_LOGS
+#define THREAD_ID_IN_LOGS
 
 #ifdef ALLOW_DEBUG_LOGS
-    inline void EVENT_LOG(std::string&& str) {   
-        auto t = std::time(nullptr);
-        auto tm = *std::localtime(&t);
+    inline void EVENT_LOG(const std::string& str) {   
         #ifdef TIMESTAMP_IN_LOGS
-            std::cerr << "[timestamp: " << std::put_time(&tm, "%a, %d %b %Y %T") << "] [thread ID: " << std::this_thread::get_id() << "] " << str << std::endl;
-        #else
-            std::cerr << "[thread ID: " << std::this_thread::get_id() << "] " << str << std::endl;
+            auto t = std::time(nullptr);
+            auto tm = *std::localtime(&t);
+            std::cerr << "[timestamp: " << std::put_time(&tm, "%a, %d %b %Y %T") << "] ";
         #endif
+
+        #ifdef THREAD_ID_IN_LOGS
+            std::cerr << "[thread ID: " << std::this_thread::get_id() << "] ";
+        #endif
+
+        std::cerr << str << std::endl;
     }
 
     #ifdef ALLOW_FUNCTRACE
@@ -32,12 +37,9 @@
         #define FUNCTRACE() {}
     #endif
 #else
-    inline void EVENT_LOG(std::string&& str) {}
+    inline void EVENT_LOG(const std::string& str) {}
 
     #define FUNCTRACE() {}
 #endif //ALLOW_DEBUG_LOGS
-
-// namespace simpleEventSystem {
-// } // namespace simpleEventSystem 
 
 #endif // __SIMPLE_EVENT_DEBUG__
