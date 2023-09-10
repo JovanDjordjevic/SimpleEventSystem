@@ -1,7 +1,8 @@
 #ifndef __SIMPLE_EVENT_LISTENER__
 #define __SIMPLE_EVENT_LISTENER__
 
-#include <set>
+#include <string>
+#include <unordered_set>
 
 #define ON_EVENT(_eventPtr_, _eventClass_, _function_) \
     if (_eventClass_* _castedPtr_ = dynamic_cast<_eventClass_*>(_eventPtr_)) { \
@@ -30,18 +31,18 @@ namespace simpleEventSystem {
             EventListener& operator=(const EventListener& other) noexcept = default;
             EventListener& operator=(EventListener&& other) noexcept = default;
 
-            virtual void onEvent(Event* event) = 0;
+            virtual void onEvent(Event*);
 
-            void registerEventGenerator(EventGenerator* generator);
-            void unregisterEventGenerator(EventGenerator* generator, const bool mutual = true);
+            void subscribeToListenerGroup(const std::string& listenerGroupName, int listenerPriority = 1000);
+            void subscribeToListenerGroups(const std::unordered_set<std::string>& groups, int listenerPriority = 1000);
+            void unsubscribeFromListenerGroup(const std::string& listenerGroupName);
+            void unsubscribeFromListenerGroups(const std::unordered_set<std::string>& groups);
 
-            std::size_t getNumberOfGenerators() const;
-
-            bool isListenerOf(EventGenerator* generator);
-
+            bool isInListenerGroup(const std::string& listenerGroupName);
+            std::unordered_set<std::string> getListenerGroups() const;
         private:
-            // list of generators this listener will receive events from
-            std::set<EventGenerator*> mGenerators;
+            // keeps track what groups this listener is subscribed to
+            std::unordered_set<std::string> mListenerGroups;
     };
 } // namespace simpleEventSystem 
 

@@ -34,7 +34,7 @@ class MyEventListener : public simpleEventSystem::EventListener {
 
         void onMyEvent(MyEvent* event) {
             std::cout << event->getEventData() << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            // std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     private:
 };

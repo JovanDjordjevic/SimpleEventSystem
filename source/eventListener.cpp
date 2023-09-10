@@ -6,46 +6,56 @@
 namespace simpleEventSystem {
     EventListener::~EventListener() noexcept {
         FUNCTRACE();
-        for (auto generator : mGenerators) {
-            generator->unregisterListener(this, false);
-        }
+        EventLoop::getInstance().removeListenerFromGroups(this, mListenerGroups);
+        mListenerGroups = {};
+        return;
     }
 
-    void EventListener::registerEventGenerator(EventGenerator* generator) {
+    void EventListener::onEvent(Event*) {
+        EVENT_LOG("Base class call of EventListener::onEvent, probably not valid");
+    }
+
+    void EventListener::subscribeToListenerGroup(const std::string& listenerGroupName, int listenerPriority) {
         FUNCTRACE();
-        if (!generator) {
-            return;
-        }
-
-        mGenerators.emplace(generator);
+        EventLoop::getInstance().addListenerToGroup(this, listenerGroupName, listenerPriority);
+        mListenerGroups.emplace(listenerGroupName);
+        return;
     }
 
-    void EventListener::unregisterEventGenerator(EventGenerator* generator, const bool mutual) {
+    void EventListener::subscribeToListenerGroups(const std::unordered_set<std::string>& groups, int listenerPriority) {
         FUNCTRACE();
-        if (!generator) {
-            return;
+        EventLoop::getInstance().addListenerToGroups(this, groups, listenerPriority);
+        for (auto& group : groups) {
+            mListenerGroups.emplace(group);
         }
 
-        auto it = mGenerators.find(generator);
-        if (it != mGenerators.end()) {
-            auto tmp = *it;
-            mGenerators.erase(it);
-            if (mutual) {
-                tmp->unregisterListener(this);
-            }
-        }
+        return;
     }
 
-    std::size_t EventListener::getNumberOfGenerators() const {
-        return mGenerators.size();
-    }
-
-    bool EventListener::isListenerOf(EventGenerator* generator) {
+    void EventListener::unsubscribeFromListenerGroup(const std::string& listenerGroupName) {
         FUNCTRACE();
-        if (!generator) {
-            return false;
+        EventLoop::getInstance().removeListenerFromGroup(this, listenerGroupName);
+        mListenerGroups.erase(listenerGroupName);
+        return;
+    }
+
+    void EventListener::unsubscribeFromListenerGroups(const std::unordered_set<std::string>& groups) {
+        FUNCTRACE();
+        EventLoop::getInstance().removeListenerFromGroups(this, groups);
+        for (auto& group : groups) {
+            mListenerGroups.erase(group);
         }
 
-        return mGenerators.find(generator) != mGenerators.end();
+        return;
     }
-} // namespace simpleEventSystem 
+
+    bool EventListener::isInListenerGroup(const std::string& listenerGroupName) {
+        FUNCTRACE();
+        return mListenerGroups.find(listenerGroupName) != mListenerGroups.end();
+    }
+
+    std::unordered_set<std::string> EventListener::getListenerGroups() const {
+        FUNCTRACE();
+        return mListenerGroups;
+    }
+} // namespace simpleEventSystem

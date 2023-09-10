@@ -1,6 +1,8 @@
 #ifndef __SIMPLE_EVENT__
 #define __SIMPLE_EVENT__
 
+#include <string>
+
 namespace simpleEventSystem {
     class EventGenerator;
 
@@ -27,6 +29,9 @@ namespace simpleEventSystem {
 
             void setPriority(const EventPriority priority);
             EventPriority getPriority() const;
+
+            void setRecevingGroup(const std::string& listenerGroupName);
+            std::string getRecevingGroup() const;
             
             void consume();
             bool isConsumed() const;
@@ -35,6 +40,7 @@ namespace simpleEventSystem {
             bool mIsConsumed;
             EventPriority mPriority;
             EventGenerator* mEventGenerator;
+            std::string mReceivingGroup;
     };
 
     struct EventPirorityComparator {
