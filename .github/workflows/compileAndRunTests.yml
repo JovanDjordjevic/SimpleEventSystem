@@ -32,7 +32,18 @@ jobs:
         run: mkdir build 
       - name: "Run CMake"
         working-directory: build
-        run: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTING=ON -DENABLE_COVERAGE_REPORT=ON -DENABLE_DOXYGEN=ON -DENABLE_BUILD_EXAMPLES=ON ..
+        run: >-
+          cmake -G "Unix Makefiles"
+          -DCMAKE_BUILD_TYPE=Debug
+          -DSES_ENABLE_BUILD_TESTS=ON
+          -DSES_ENABLE_COVERAGE_REPORT=ON
+          -DSES_ENABLE_DOXYGEN=ON
+          -DSES_ENABLE_BUILD_EXAMPLES=ON
+          -DSES_ENABLE_CALLGRIND_TARGETS=OFF
+          -DSES_ENABLE_STATIC_ANALYSIS=OFF
+          -DSES_ENABLE_BRUTAL_COMPILE_OPTIONS=OFF
+          -DSES_ENABLE_SANITIZERS=OFF
+          ..
       - name: "Build targets"
         working-directory: build
         run: cmake --build .
@@ -99,7 +110,17 @@ jobs:
         run: mkdir build 
       - name: "Run CMake"
         working-directory: build
-        run: cmake -G "Visual Studio 17 2022" -DENABLE_TESTING=ON -DENABLE_COVERAGE_REPORT=OFF -DENABLE_DOXYGEN=OFF -DENABLE_BUILD_EXAMPLES=ON ..
+        run: >-
+          cmake -G "Visual Studio 17 2022"
+          -DSES_ENABLE_BUILD_TESTS=ON
+          -DSES_ENABLE_COVERAGE_REPORT=OFF
+          -DSES_ENABLE_DOXYGEN=OFF
+          -DSES_ENABLE_BUILD_EXAMPLES=ON
+          -DSES_ENABLE_CALLGRIND_TARGETS=OFF
+          -DSES_ENABLE_STATIC_ANALYSIS=OFF
+          -DSES_ENABLE_BRUTAL_COMPILE_OPTIONS=OFF
+          -DSES_ENABLE_SANITIZERS=OFF
+          ..
       - name: "Build targets"
         working-directory: build
         run: cmake --build . --target ALL_BUILD --config Debug
@@ -116,7 +137,18 @@ jobs:
         run: mkdir build 
       - name: "Run CMake"
         working-directory: build
-        run: cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTING=ON -DENABLE_COVERAGE_REPORT=OFF -DENABLE_DOXYGEN=OFF -DENABLE_BUILD_EXAMPLES=ON ..
+        run: >-
+          cmake
+          -DCMAKE_BUILD_TYPE=Debug 
+          -DSES_ENABLE_BUILD_TESTS=ON
+          -DSES_ENABLE_COVERAGE_REPORT=OFF
+          -DSES_ENABLE_DOXYGEN=OFF
+          -DSES_ENABLE_BUILD_EXAMPLES=ON
+          -DSES_ENABLE_CALLGRIND_TARGETS=OFF
+          -DSES_ENABLE_STATIC_ANALYSIS=OFF
+          -DSES_ENABLE_BRUTAL_COMPILE_OPTIONS=OFF
+          -DSES_ENABLE_SANITIZERS=OFF
+          ..
       - name: "Build targets"
         working-directory: build
         run: cmake --build .
