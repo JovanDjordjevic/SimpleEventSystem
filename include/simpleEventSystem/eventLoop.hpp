@@ -1,5 +1,5 @@
-#ifndef __SIMPLE_EVENT_LOOP__
-#define __SIMPLE_EVENT_LOOP__
+#ifndef SIMPLE_EVENT_LOOP_HPP
+#define SIMPLE_EVENT_LOOP_HPP
 
 #include <atomic>
 #include <condition_variable>
@@ -77,4 +77,4 @@ namespace simpleEventSystem {
     };
 } // namespace simpleEventSystem 
 
-#endif // __SIMPLE_EVENT_LOOP__
+#endif // SIMPLE_EVENT_LOOP_HPP

@@ -5,7 +5,7 @@
 
 namespace simpleEventSystem {
     EventListener::~EventListener() noexcept {
-        FUNCTRACE();
+        FUNCTRACE()
         EventLoop::getInstance().removeListenerFromGroups(this, mListenerGroups);
         mListenerGroups = {};
         return;
@@ -16,14 +16,14 @@ namespace simpleEventSystem {
     }
 
     void EventListener::subscribeToListenerGroup(const std::string& listenerGroupName, int listenerPriority) {
-        FUNCTRACE();
+        FUNCTRACE()
         EventLoop::getInstance().addListenerToGroup(this, listenerGroupName, listenerPriority);
         mListenerGroups.emplace(listenerGroupName);
         return;
     }
 
     void EventListener::subscribeToListenerGroups(const std::unordered_set<std::string>& groups, int listenerPriority) {
-        FUNCTRACE();
+        FUNCTRACE()
         EventLoop::getInstance().addListenerToGroups(this, groups, listenerPriority);
         for (auto& group : groups) {
             mListenerGroups.emplace(group);
@@ -33,14 +33,14 @@ namespace simpleEventSystem {
     }
 
     void EventListener::unsubscribeFromListenerGroup(const std::string& listenerGroupName) {
-        FUNCTRACE();
+        FUNCTRACE()
         EventLoop::getInstance().removeListenerFromGroup(this, listenerGroupName);
         mListenerGroups.erase(listenerGroupName);
         return;
     }
 
     void EventListener::unsubscribeFromListenerGroups(const std::unordered_set<std::string>& groups) {
-        FUNCTRACE();
+        FUNCTRACE()
         EventLoop::getInstance().removeListenerFromGroups(this, groups);
         for (auto& group : groups) {
             mListenerGroups.erase(group);
@@ -50,12 +50,12 @@ namespace simpleEventSystem {
     }
 
     bool EventListener::isInListenerGroup(const std::string& listenerGroupName) {
-        FUNCTRACE();
+        FUNCTRACE()
         return mListenerGroups.find(listenerGroupName) != mListenerGroups.end();
     }
 
     std::unordered_set<std::string> EventListener::getListenerGroups() const {
-        FUNCTRACE();
+        FUNCTRACE()
         return mListenerGroups;
     }
 } // namespace simpleEventSystem

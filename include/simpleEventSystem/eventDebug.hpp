@@ -1,5 +1,5 @@
-#ifndef __SIMPLE_EVENT_DEBUG__
-#define __SIMPLE_EVENT_DEBUG__
+#ifndef SIMPLE_EVENT_DEBUG_HPP
+#define SIMPLE_EVENT_DEBUG_HPP
 
 #include <cstring>
 #include <ctime>
@@ -7,9 +7,6 @@
 #include <iostream>
 #include <string>
 #include <thread>
-
-#define __LAST_FILENAME_COMPONENT__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__))
-#define __FUNCTION_NAME__ (strrchr(__FUNCTION__, ':') ? strrchr(__FUNCTION__, ':') + 1 : __FUNCTION__)
 
 #define ALLOW_DEBUG_LOGS
 #define ALLOW_FUNCTRACE
@@ -32,7 +29,30 @@
     }
 
     #ifdef ALLOW_FUNCTRACE
-        #define FUNCTRACE() { EVENT_LOG("file: [" + std::string{__LAST_FILENAME_COMPONENT__} + "] func: [" + std::string{__FUNCTION_NAME__} + "] line: [" + std::to_string(__LINE__) + "]"); }
+        inline std::string getLastFileNameComponent(const std::string& fullFileName) {
+            auto lastIndex = fullFileName.rfind('/');
+            if (lastIndex != std::string::npos) {
+                return fullFileName.substr(lastIndex + 1);
+            }
+
+            lastIndex = fullFileName.rfind('\\');
+            if (lastIndex != std::string::npos) {
+                return fullFileName.substr(lastIndex + 1);
+            }
+
+            return fullFileName;
+        }
+
+        inline std::string getFunctionName(const std::string& fullFunctionName) {
+            auto lastIndex = fullFunctionName.rfind(':');
+            if (lastIndex != std::string::npos) {
+                return fullFunctionName.substr(lastIndex + 1);
+            }
+
+            return fullFunctionName;
+        }
+
+        #define FUNCTRACE() { EVENT_LOG("file: [" + getLastFileNameComponent(__FILE__) + "] func: [" + getFunctionName(__func__) + "] line: [" + std::to_string(__LINE__) + "]"); }
     #else
         #define FUNCTRACE() {}
     #endif
@@ -42,4 +62,4 @@
     #define FUNCTRACE() {}
 #endif //ALLOW_DEBUG_LOGS
 
-#endif // __SIMPLE_EVENT_DEBUG__
+#endif // SIMPLE_EVENT_DEBUG_HPP

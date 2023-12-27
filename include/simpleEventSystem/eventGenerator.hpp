@@ -1,5 +1,5 @@
-#ifndef __SIMPLE_EVENT_GENERATOR__
-#define __SIMPLE_EVENT_GENERATOR__
+#ifndef SIMPLE_EVENT_GENERATOR_HPP
+#define SIMPLE_EVENT_GENERATOR_HPP
 
 #include <string>
 
@@ -24,4 +24,4 @@ namespace simpleEventSystem {
     };
 } // namespace simpleEventSystem 
 
-#endif // __SIMPLE_EVENT_GENERATOR__
+#endif // SIMPLE_EVENT_GENERATOR_HPP

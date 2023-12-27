@@ -5,12 +5,12 @@ namespace simpleEventSystem {
     Event::Event() noexcept
         : mIsConsumed{false}, mPriority{EventPriority::DEFAULT}, mEventGenerator{nullptr}, mReceivingGroup{}
     {
-        FUNCTRACE();
+        FUNCTRACE()
         return;
     }
 
     void Event::setEventGenerator(EventGenerator* generator) {
-        // FUNCTRACE();
+        // FUNCTRACE()
         if (!generator) {
             return;
         }
@@ -20,39 +20,39 @@ namespace simpleEventSystem {
     }
 
     EventGenerator* Event::getEventGenerator() const {
-        // FUNCTRACE();
+        // FUNCTRACE()
         return mEventGenerator;
     }
 
     void Event::setPriority(const EventPriority priority) {
-        // FUNCTRACE();
+        // FUNCTRACE()
         mPriority = priority;
         return;
     }
     
     EventPriority Event::getPriority() const {
-        // FUNCTRACE();
+        // FUNCTRACE()
         return mPriority;
     }
 
     void Event::setRecevingGroup(const std::string& listenerGroupName) {
-        // FUNCTRACE();
+        // FUNCTRACE()
         mReceivingGroup = listenerGroupName;
         return;
     }
     std::string Event::getRecevingGroup() const {
-        // FUNCTRACE();
+        // FUNCTRACE()
         return mReceivingGroup;
     }
 
     void Event::consume() {
-        FUNCTRACE();
+        FUNCTRACE()
         mIsConsumed = true;
         return;
     }
 
     bool Event::isConsumed() const {
-        FUNCTRACE();
+        FUNCTRACE()
         return mIsConsumed;
     }
 

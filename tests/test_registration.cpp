@@ -73,7 +73,7 @@ int main() {
     assert(1 == std::count_if(meg3Listeners.begin(), meg3Listeners.end(), [](const std::pair<simpleEventSystem::EventListener*, int>& elem) { return elem.second == 500; }));
     assert(0 == std::count_if(meg3Listeners.begin(), meg3Listeners.end(), [](const std::pair<simpleEventSystem::EventListener*, int>& elem) { return elem.second == 1500; }));
 
-    int i = 0;
+    size_t i = 0;
     std::vector<simpleEventSystem::EventListener*> expectedListenerOrder = {&mel4, &mel5};
     std::vector<int> expectedPriorityOrder = {1000, 500};
 

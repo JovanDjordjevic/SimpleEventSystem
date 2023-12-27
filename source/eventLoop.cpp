@@ -9,20 +9,29 @@
 
 namespace simpleEventSystem {
     EventLoop& EventLoop::getInstance() {
-        FUNCTRACE();
+        FUNCTRACE()
         static EventLoop eventLoop;
         return eventLoop;
     }
 
     EventLoop::EventLoop() noexcept
-        : mEventQueue{}, mShouldTerminateLoop{false}, mQueueEventsAllowed{true}, mLoopStopped{true}
+        : mEventQueue{},
+          mLoopThread{},
+          mEventQueueMutex{},
+          mCondQueue{},
+          mCondEventPostFinished{},
+          mShouldTerminateLoop{false},
+          mQueueEventsAllowed{true},
+          mLoopStopped{true},
+          mListenerGroups{},
+          mListenerGroupAccessMutex{}
     {
-        FUNCTRACE();
+        FUNCTRACE()
         return;
     }
     
     EventLoop::~EventLoop() noexcept {
-        FUNCTRACE();
+        FUNCTRACE()
         if (!mLoopStopped) {
             stopLoop();
         }
@@ -31,7 +40,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::startLoop() {
-        FUNCTRACE();
+        FUNCTRACE()
 
         if (mLoopStopped) {
             mQueueEventsAllowed = true;
@@ -46,7 +55,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::stopLoop() {
-        FUNCTRACE();
+        FUNCTRACE()
         if (!mLoopStopped) {
             mQueueEventsAllowed = false;
 
@@ -69,7 +78,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::mainLoop() {
-        FUNCTRACE();
+        FUNCTRACE()
         Event* event = nullptr;
         
         while (true) {
@@ -112,12 +121,10 @@ namespace simpleEventSystem {
             
             mCondEventPostFinished.notify_one();
         }
-
-        return;
     }
 
     bool EventLoop::queueEvent(Event* event) {
-        FUNCTRACE();
+        FUNCTRACE()
         if (!event) {
             return false;
         }
@@ -139,7 +146,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::addListenerToGroup(EventListener* listener, const std::string& listenerGroupName, int listenerPriority) {
-        FUNCTRACE();
+        FUNCTRACE()
 
         std::unique_lock<std::mutex> listenerGroupLock{mListenerGroupAccessMutex};
 
@@ -156,7 +163,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::addListenerToGroups(EventListener* listener, const std::unordered_set<std::string>& groups, int listenerPriority) {
-        FUNCTRACE();
+        FUNCTRACE()
 
         if (!listener) {
             return;
@@ -180,7 +187,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::removeListenerFromGroup(EventListener* listener, const std::string& listenerGroupName) {
-        FUNCTRACE();
+        FUNCTRACE()
         if (!listener) {
             return;
         }
@@ -199,7 +206,7 @@ namespace simpleEventSystem {
     }
 
     void EventLoop::removeListenerFromGroups(EventListener* listener, const std::unordered_set<std::string>& groups) {
-        FUNCTRACE();
+        FUNCTRACE()
 
         if (!listener) {
             return;
@@ -242,13 +249,13 @@ namespace simpleEventSystem {
     }
 
     std::unordered_map<std::string, std::multiset<std::pair<EventListener*, int>, ListenerPriorityComparator>> EventLoop::getListenerGroups() {
-        FUNCTRACE();
+        FUNCTRACE()
         std::unique_lock<std::mutex> listenerGroupLock{mListenerGroupAccessMutex};
         return mListenerGroups;
     }
 
     const std::multiset<std::pair<EventListener*, int>, ListenerPriorityComparator>& EventLoop::getListenersInGroup(const std::string& listenerGroupName) {
-        FUNCTRACE();
+        FUNCTRACE()
         std::unique_lock<std::mutex> listenerGroupLock{mListenerGroupAccessMutex};
 
         // !!!!!
@@ -258,7 +265,7 @@ namespace simpleEventSystem {
 
 
     void EventLoop::eraseEmptyGroups() {
-        FUNCTRACE();
+        FUNCTRACE()
         std::unique_lock<std::mutex> listenerGroupLock{mListenerGroupAccessMutex};
 
         auto it = mListenerGroups.begin();

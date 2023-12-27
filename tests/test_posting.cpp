@@ -31,8 +31,13 @@ int main() {
 
     mainLoop.stopLoop();
 
-    bool ret6 = meg.postEventToListenerGroup(new MyEvent{"Event 6"}, "megListeners"); // should fail
+    MyEvent* event6 = new MyEvent{"Event 6"};
+    bool ret6 = meg.postEventToListenerGroup(event6, "megListeners"); // should fail
+    if (!ret6) {
+        delete event6;
+    }
     assert(ret6 == false);
+
 
     mainLoop.startLoop();
 

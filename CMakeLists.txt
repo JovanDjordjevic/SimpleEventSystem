@@ -45,12 +45,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             list(APPEND SES_WARNING_SUPPRESSORS 
                 -Wno-unsafe-loop-optimizations
+                -Wno-effc++
             )
         elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             list(APPEND SES_WARNING_SUPPRESSORS 
                 -Wno-padded
                 -Wno-date-time
                 -Wno-c++98-compat
+                -Wno-exit-time-destructors
             )
         elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
             list(APPEND SES_WARNING_SUPPRESSORS 
@@ -58,6 +60,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
                 /wd4514
                 /wd4711
                 /wd5045
+                /wd4996
+                /wd4668
             )
         endif()
     endif()

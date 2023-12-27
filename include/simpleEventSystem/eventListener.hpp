@@ -1,5 +1,5 @@
-#ifndef __SIMPLE_EVENT_LISTENER__
-#define __SIMPLE_EVENT_LISTENER__
+#ifndef SIMPLE_EVENT_LISTENER_HPP
+#define SIMPLE_EVENT_LISTENER_HPP
 
 #include <string>
 #include <unordered_set>
@@ -46,4 +46,4 @@ namespace simpleEventSystem {
     };
 } // namespace simpleEventSystem 
 
-#endif // __SIMPLE_EVENT_LISTENER__
+#endif // SIMPLE_EVENT_LISTENER_HPP

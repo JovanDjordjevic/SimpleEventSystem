@@ -12,13 +12,13 @@ namespace simpleEventSystem {
     }
 
     EventGenerator::~EventGenerator() noexcept {
-        FUNCTRACE();
+        FUNCTRACE()
         EventLoop::getInstance().removeEventsPostedBy(this);
         return;
     }
 
     bool EventGenerator::postEventToListenerGroup(Event* event, const std::string& listenerGroupName, const EventPriority priority) {
-        FUNCTRACE();
+        FUNCTRACE()
         if (!event) {
             return false;
         }
@@ -30,7 +30,7 @@ namespace simpleEventSystem {
     }
 
     void EventGenerator::directNotifyListenerGroup(Event* event, const std::string& listenerGroupName, const EventPriority priority) {
-        FUNCTRACE();
+        FUNCTRACE()
         if (!event) {
             return;
         }

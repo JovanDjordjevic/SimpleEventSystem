@@ -1,5 +1,5 @@
-#ifndef __SIMPLE_EVENT__
-#define __SIMPLE_EVENT__
+#ifndef SIMPLE_EVENT_HPP
+#define SIMPLE_EVENT_HPP
 
 #include <string>
 
@@ -48,4 +48,4 @@ namespace simpleEventSystem {
     };
 } // namespace simpleEventSystem 
 
-#endif // __SIMPLE_EVENT__
+#endif // SIMPLE_EVENT_HPP
